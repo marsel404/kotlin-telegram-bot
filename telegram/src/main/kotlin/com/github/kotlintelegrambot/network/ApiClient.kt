@@ -1260,6 +1260,14 @@ internal class ApiClient(
         errorMessage,
     ).runApiOperation()
 
+    fun refundStarPayment(
+        userId: Long,
+        telegramPaymentChargeId: String,
+    ): TelegramBotResult<Boolean> = service.refundStarPayment(
+        userId,
+        telegramPaymentChargeId,
+    ).runApiOperation()
+
     /***
      * Stickers
      */

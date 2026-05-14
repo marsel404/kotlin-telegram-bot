@@ -8,6 +8,7 @@ import com.github.kotlintelegrambot.entities.files.PhotoSize
 import com.github.kotlintelegrambot.entities.files.Video
 import com.github.kotlintelegrambot.entities.files.VideoNote
 import com.github.kotlintelegrambot.entities.files.Voice
+import com.github.kotlintelegrambot.entities.payments.RefundedPayment
 import com.github.kotlintelegrambot.entities.payments.SuccessfulPayment
 import com.github.kotlintelegrambot.entities.polls.Poll
 import com.github.kotlintelegrambot.entities.stickers.Sticker
@@ -60,6 +61,7 @@ data class Message(
     @Name("migrate_from_chat_id") val migrateFromChatId: Long? = null,
     val invoice: Invoice? = null,
     @Name("successful_payment") val successfulPayment: SuccessfulPayment? = null,
+    @Name("refunded_payment") val refundedPayment: RefundedPayment? = null,
     @Name("reply_markup") val replyMarkup: InlineKeyboardMarkup? = null,
     @Name("proximity_alert_triggered") val proximityAlertTriggered: ProximityAlertTriggered? = null,
     @Name("web_app_data") val webAppData: WebAppData? = null,

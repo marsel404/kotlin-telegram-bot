@@ -1994,6 +1994,22 @@ class Bot private constructor(
     )
 
     /**
+     * Refunds a successful payment in Telegram Stars. Returns True on success.
+     *
+     * @param userId Identifier of the user whose payment will be refunded.
+     * @param telegramPaymentChargeId Telegram payment identifier.
+     *
+     * @return True on success.
+     */
+    fun refundStarPayment(
+        userId: Long,
+        telegramPaymentChargeId: String,
+    ): TelegramBotResult<Boolean> = apiClient.refundStarPayment(
+        userId,
+        telegramPaymentChargeId,
+    )
+
+    /**
      * Use this method to send answers to an inline query. No more than 50 results per query are allowed.
      *
      * @param inlineQueryId Unique identifier for the answered query.

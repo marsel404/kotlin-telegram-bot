@@ -913,6 +913,13 @@ internal interface ApiService {
     ): Call<Response<Boolean>>
 
     @FormUrlEncoded
+    @POST("refundStarPayment")
+    fun refundStarPayment(
+        @Field("user_id") userId: Long,
+        @Field("telegram_payment_charge_id") telegramPaymentChargeId: String,
+    ): Call<Response<Boolean>>
+
+    @FormUrlEncoded
     @POST("answerInlineQuery")
     fun answerInlineQuery(
         @Field("inline_query_id") inlineQueryId: String,
