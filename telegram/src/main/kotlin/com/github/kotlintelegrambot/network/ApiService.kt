@@ -124,6 +124,7 @@ internal interface ApiService {
         @Field(ApiConstants.ALLOW_SENDING_WITHOUT_REPLY) allowSendingWithoutReply: Boolean?,
         @Field(ApiConstants.REPLY_MARKUP) replyMarkup: ReplyMarkup?,
         @Field(ApiConstants.MESSAGE_THREAD_ID) messageThreadId: Long?,
+        @Field("entities") entities: String? = null,
     ): Call<Response<Message>>
 
     @FormUrlEncoded
@@ -718,6 +719,7 @@ internal interface ApiService {
         @Field("parse_mode") parseMode: ParseMode?,
         @Field("disable_web_page_preview") disableWebPagePreview: Boolean?,
         @Field(ApiConstants.REPLY_MARKUP) replyMarkup: ReplyMarkup? = null,
+        @Field("entities") entities: String? = null,
     ): Call<Response<Message>>
 
     @FormUrlEncoded
@@ -729,6 +731,7 @@ internal interface ApiService {
         @Field("caption") caption: String,
         @Field("parse_mode") parseMode: ParseMode?,
         @Field(ApiConstants.REPLY_MARKUP) replyMarkup: ReplyMarkup? = null,
+        @Field("caption_entities") captionEntities: String? = null,
     ): Call<Response<Message>>
 
     @FormUrlEncoded

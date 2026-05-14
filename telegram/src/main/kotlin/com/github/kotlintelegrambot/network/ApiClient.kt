@@ -224,6 +224,7 @@ internal class ApiClient(
         allowSendingWithoutReply: Boolean?,
         replyMarkup: ReplyMarkup?,
         messageThreadId: Long?,
+        entities: List<MessageEntity>? = null,
     ): TelegramBotResult<Message> = service.sendMessage(
         chatId,
         text,
@@ -235,6 +236,7 @@ internal class ApiClient(
         allowSendingWithoutReply,
         replyMarkup,
         messageThreadId,
+        if (entities != null) gson.toJson(entities) else null,
     ).runApiOperation()
 
     fun forwardMessage(
@@ -1108,6 +1110,7 @@ internal class ApiClient(
         parseMode: ParseMode?,
         disableWebPagePreview: Boolean?,
         replyMarkup: ReplyMarkup?,
+        entities: List<MessageEntity>? = null,
     ): Call<Response<Message>> {
         return service.editMessageText(
             chatId,
@@ -1117,6 +1120,7 @@ internal class ApiClient(
             parseMode,
             disableWebPagePreview,
             replyMarkup,
+            if (entities != null) gson.toJson(entities) else null,
         )
     }
 
@@ -1127,6 +1131,7 @@ internal class ApiClient(
         caption: String,
         parseMode: ParseMode?,
         replyMarkup: ReplyMarkup?,
+        captionEntities: List<MessageEntity>? = null,
     ): Call<Response<Message>> {
         return service.editMessageCaption(
             chatId,
@@ -1135,6 +1140,7 @@ internal class ApiClient(
             caption,
             parseMode,
             replyMarkup,
+            if (captionEntities != null) gson.toJson(captionEntities) else null,
         )
     }
 

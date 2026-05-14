@@ -273,6 +273,7 @@ class Bot private constructor(
         allowSendingWithoutReply: Boolean? = null,
         replyMarkup: ReplyMarkup? = null,
         messageThreadId: Long? = null,
+        entities: List<MessageEntity>? = null,
     ): TelegramBotResult<Message> = apiClient.sendMessage(
         chatId,
         text,
@@ -284,6 +285,7 @@ class Bot private constructor(
         allowSendingWithoutReply,
         replyMarkup,
         messageThreadId,
+        entities,
     )
 
     /**
@@ -1668,6 +1670,7 @@ class Bot private constructor(
         parseMode: ParseMode? = null,
         disableWebPagePreview: Boolean? = null,
         replyMarkup: ReplyMarkup? = null,
+        entities: List<MessageEntity>? = null,
     ) = apiClient.editMessageText(
         chatId,
         messageId,
@@ -1676,6 +1679,7 @@ class Bot private constructor(
         parseMode,
         disableWebPagePreview,
         replyMarkup,
+        entities,
     ).call()
 
     fun editMessageCaption(
@@ -1685,6 +1689,7 @@ class Bot private constructor(
         caption: String,
         parseMode: ParseMode? = null,
         replyMarkup: ReplyMarkup? = null,
+        captionEntities: List<MessageEntity>? = null,
     ) = apiClient.editMessageCaption(
         chatId,
         messageId,
@@ -1692,6 +1697,7 @@ class Bot private constructor(
         caption,
         parseMode,
         replyMarkup,
+        captionEntities,
     ).call()
 
     fun editMessageMedia(
