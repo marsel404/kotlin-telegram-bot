@@ -2,7 +2,6 @@ package com.github.kotlintelegrambot.network
 
 import com.github.kotlintelegrambot.types.TelegramBotResult
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 
 internal class ApiResponseMapper {
 
@@ -33,9 +32,13 @@ internal class ApiResponseMapper {
 
         val responseBodyString = apiResponse.errorBody()?.string() ?: return invalidResponse()
 
+        // Only the ok / error_code / description fields are needed for the error path,
+        // so we deserialize the raw wrapper without a generic capture. Gson 2.14+ rejects
+        // TypeToken<Response<T>> when T is a method type variable, which is why we use the
+        // raw class here and cast.
+        @Suppress("UNCHECKED_CAST")
         val responseBody = try {
-            val type = object : TypeToken<Response<T>>() {}.type
-            Gson().fromJson<Response<T>>(responseBodyString, type)
+            Gson().fromJson(responseBodyString, Response::class.java) as Response<T>
         } catch (e: Exception) {
             return TelegramBotResult.Error.HttpError(
                 apiResponse.code(),

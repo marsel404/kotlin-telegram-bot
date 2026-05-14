@@ -33,7 +33,7 @@ class MediaGroupTest {
 
         val mediaGroup = MediaGroup.from(anyInputMediaPhoto, anyInputMediaVideo)
 
-        assertArrayEquals(arrayOf(anyInputMediaPhoto, anyInputMediaVideo), mediaGroup.medias)
+        assertArrayEquals(arrayOf<GroupableMedia>(anyInputMediaPhoto, anyInputMediaVideo), mediaGroup.medias)
     }
 
     @Test
@@ -63,7 +63,7 @@ class MediaGroupTest {
         )
 
         assertArrayEquals(
-            arrayOf(
+            arrayOf<GroupableMedia>(
                 anyInputMediaPhoto1,
                 anyInputMediaPhoto2,
                 anyInputMediaPhoto3,

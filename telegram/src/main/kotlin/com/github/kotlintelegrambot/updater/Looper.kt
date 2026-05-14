@@ -1,8 +1,10 @@
 package com.github.kotlintelegrambot.updater
 
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
 
@@ -14,11 +16,13 @@ internal interface Looper {
 /**
  * [Looper] implementation that runs a given block of code in a loop with an [CoroutineDispatcher] (mostly
  * intended to run the loop in a different coroutine). The loop will stop if the coroutine running the
- * loop is interrupted or in the next iteration after the [quit] method is called.
+ * loop is interrupted or in the next iteration after the [quit] method is called. Uncaught exceptions
+ * thrown by the loop body terminate the loop but are not propagated to the caller's coroutine scope.
  */
 internal class CoroutineLooper(coroutineDispatcher: CoroutineDispatcher) : Looper {
 
-    private val scope: CoroutineScope = CoroutineScope(coroutineDispatcher)
+    private val exceptionHandler = CoroutineExceptionHandler { _, _ -> /* swallow: the loop stops anyway */ }
+    private val scope: CoroutineScope = CoroutineScope(coroutineDispatcher + SupervisorJob() + exceptionHandler)
 
     @Volatile private var job: Job? = null
 

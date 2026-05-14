@@ -26,6 +26,7 @@ dependencies {
 
     // Testing
     testImplementation libs.bundles.junit
+    testRuntimeOnly libs.junit.platform.launcher
     testImplementation libs.assertj.core
     testImplementation libs.mockk
     testImplementation libs.okhttp3.mockwebserver

@@ -165,15 +165,15 @@ sealed class InlineQueryResult(
         val latitude: Float,
         val longitude: Float,
         val title: String,
-        @SerializedName("horizontal_accuracy") val horizontalAccuracy: Float? = null,
         @SerializedName("live_period") val livePeriod: Int? = null,
-        val heading: Int? = null,
         @SerializedName("reply_markup") override val replyMarkup: InlineKeyboardMarkup? = null,
         @SerializedName("input_message_content") val inputMessageContent: InputMessageContent? = null,
         @SerializedName("thumb_url") val thumbUrl: String? = null,
         @SerializedName("thumb_width") val thumbWidth: Int? = null,
         @SerializedName("thumb_height") val thumbHeight: Int? = null,
         @SerializedName("proximity_alert_radius") val proximityAlertRadius: Int? = null,
+        @SerializedName("horizontal_accuracy") val horizontalAccuracy: Float? = null,
+        val heading: Int? = null,
     ) : InlineQueryResult(QueryResultTypes.LOCATION)
 
     data class Venue(

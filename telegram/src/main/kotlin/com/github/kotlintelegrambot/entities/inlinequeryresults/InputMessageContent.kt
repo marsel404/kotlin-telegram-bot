@@ -13,10 +13,10 @@ sealed class InputMessageContent {
     data class Location(
         val latitude: Float,
         val longitude: Float,
-        @SerializedName("horizontal_accuracy") val horizontalAccuracy: Float? = null,
         @SerializedName("live_period") val livePeriod: Int? = null,
-        val heading: Int? = null,
         @SerializedName("proximity_alert_radius") val proximityAlertRadius: Int? = null,
+        @SerializedName("horizontal_accuracy") val horizontalAccuracy: Float? = null,
+        val heading: Int? = null,
     ) : InputMessageContent()
 
     data class Venue(

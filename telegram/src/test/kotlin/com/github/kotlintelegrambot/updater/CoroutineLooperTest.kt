@@ -2,12 +2,14 @@ package com.github.kotlintelegrambot.updater
 
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import kotlin.random.Random
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class CoroutineLooperTest {
 
     private fun createCoroutineLooper(coroutineDispatcher: CoroutineDispatcher) =
@@ -37,18 +39,17 @@ class CoroutineLooperTest {
         var count = 0
         val expectedCount: Int = Random.nextInt(1000)
 
-        try {
-            sut.loop {
-                count++
+        sut.loop {
+            count++
 
-                if (count == expectedCount) {
-                    throw RuntimeException("oops")
-                }
+            if (count == expectedCount) {
+                throw RuntimeException("oops")
             }
-        } catch (testException: RuntimeException) {
-        } finally {
-            advanceUntilIdle()
-            assertEquals(expectedCount, count)
         }
+        try {
+            advanceUntilIdle()
+        } catch (testException: RuntimeException) {
+        }
+        assertEquals(expectedCount, count)
     }
 }
