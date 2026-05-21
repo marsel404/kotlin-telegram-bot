@@ -29,7 +29,6 @@ import com.github.kotlintelegrambot.entities.reaction.ReactionType
 import com.github.kotlintelegrambot.entities.stickers.MaskPosition
 import com.github.kotlintelegrambot.logging.LogLevel
 import com.github.kotlintelegrambot.network.ApiClient
-import com.github.kotlintelegrambot.network.proxy.resolveProxyCredentials
 import com.github.kotlintelegrambot.network.bimap
 import com.github.kotlintelegrambot.network.call
 import com.github.kotlintelegrambot.network.serialization.GsonFactory
@@ -44,6 +43,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.channels.Channel
 import okhttp3.Interceptor
+import okhttp3.OkHttpClient
 import java.net.Proxy
 import java.util.concurrent.Executors
 import java.io.File as SystemFile
@@ -83,16 +83,14 @@ class Bot private constructor(
         var apiUrl: String = "https://api.telegram.org/"
         var logLevel: LogLevel = LogLevel.None
         var proxy: Proxy = Proxy.NO_PROXY
-        var proxyUsername: String? = null
-        var proxyPassword: String? = null
         var coroutineDispatcher: CoroutineDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
         var httpClientInterceptors: List<Interceptor> = emptyList()
+        var okHttpClientConfigurator: OkHttpClient.Builder.() -> Unit = { }
         internal var dispatcherConfiguration: Dispatcher.() -> Unit = { }
 
         fun build(): Bot {
             val updatesQueue = Channel<DispatchableObject>()
             val looper = CoroutineLooper(Dispatchers.IO)
-            val proxyCredentials = resolveProxyCredentials(proxyUsername, proxyPassword, proxy)
             val apiClient = ApiClient(
                     token,
                     apiUrl,
@@ -101,7 +99,7 @@ class Bot private constructor(
                     proxy,
                     gson,
                     httpClientInterceptors = httpClientInterceptors,
-                    proxyCredentials = proxyCredentials,
+                    okHttpClientConfigurator = okHttpClientConfigurator,
                 )
             val updater = Updater(looper, updatesQueue, apiClient, timeout)
             val dispatcher =
