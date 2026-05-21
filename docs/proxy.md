@@ -1,21 +1,32 @@
 # Proxy configuration
 
-The library can route Telegram API traffic through a proxy. **Authenticated proxies are supported for HTTP proxies only.** Set `proxyUsername` and `proxyPassword` on `Bot.Builder`.
+The library can route Telegram API traffic through a proxy with `Bot.Builder.proxy`.
 
-You can still set `Proxy.Type.SOCKS` (or any other `java.net.Proxy`) **without** credentials — same as before; only HTTP proxy authentication was added.
+If you need extra OkHttp setup, use `Bot.Builder.okHttpClientConfigurator`. The configurator is applied to the internal `OkHttpClient.Builder`, so you can attach proxy authentication, custom TLS settings, DNS, or any other supported OkHttp option.
 
-## HTTP proxy with authentication
+## HTTP proxy with authenticator
 
 ```kotlin
+import okhttp3.Authenticator
+import okhttp3.Credentials
+import okhttp3.Response
+import okhttp3.Route
 import java.net.InetSocketAddress
 import java.net.Proxy
 
 fun main() {
+    val proxyAuthenticator = Authenticator { _: Route?, response: Response ->
+        response.request.newBuilder()
+            .header("Proxy-Authorization", Credentials.basic("proxy-user", "proxy-password"))
+            .build()
+    }
+
     val bot = bot {
         token = "YOUR_API_KEY"
         proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress("proxy.corp.example", 8080))
-        proxyUsername = "proxy-user"
-        proxyPassword = "proxy-password"
+        okHttpClientConfigurator = {
+            proxyAuthenticator(proxyAuthenticator)
+        }
         dispatch {
             // ...
         }
@@ -24,29 +35,11 @@ fun main() {
 }
 ```
 
-## How authentication is applied
+## Notes
 
-For `Proxy.Type.HTTP`, OkHttp `proxyAuthenticator` adds `Proxy-Authorization` (HTTP Basic) on `407 Proxy Authentication Required` and for preemptive CONNECT to HTTPS targets.
-
-Implementation details live in the internal `network.proxy` package; only `Bot.Builder` options are part of the public API.
-
-## Behaviour and limitations
-
-**Credentials without a proxy**
-
-If `proxy` is `Proxy.NO_PROXY` but username/password are set, credentials are **ignored** (no error). Configure `proxy` when you need authentication.
-
-**Incomplete credentials**
-
-If only `proxyUsername` or only `proxyPassword` is set, `build()` throws `IllegalArgumentException`. Set both or neither.
-
-**SOCKS or other proxy types with credentials**
-
-Username and password are applied only for `Proxy.Type.HTTP`. For SOCKS (and other types), credentials are resolved but **not used** — the proxy still works if it does not require authentication. Do not rely on `proxyUsername` / `proxyPassword` with SOCKS.
-
-**HTTP proxy auth scope**
-
-Credentials apply only to the OkHttp client inside each `ApiClient` instance (not JVM-global).
+- `proxy` still controls the transport route.
+- `okHttpClientConfigurator` only affects the OkHttp client created for that bot instance.
+- The configurator can be used for more than proxy auth, so the public API stays generic.
 
 ## Related
 
