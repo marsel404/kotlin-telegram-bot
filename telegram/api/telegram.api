@@ -254,6 +254,8 @@ public final class com/github/kotlintelegrambot/Bot$Builder {
 	public final fun getHttpClientInterceptors ()Ljava/util/List;
 	public final fun getLogLevel ()Lcom/github/kotlintelegrambot/logging/LogLevel;
 	public final fun getProxy ()Ljava/net/Proxy;
+	public final fun getProxyPassword ()Ljava/lang/String;
+	public final fun getProxyUsername ()Ljava/lang/String;
 	public final fun getTimeout ()I
 	public final fun getToken ()Ljava/lang/String;
 	public final fun getWebhookConfig ()Lcom/github/kotlintelegrambot/webhook/WebhookConfig;
@@ -262,6 +264,8 @@ public final class com/github/kotlintelegrambot/Bot$Builder {
 	public final fun setHttpClientInterceptors (Ljava/util/List;)V
 	public final fun setLogLevel (Lcom/github/kotlintelegrambot/logging/LogLevel;)V
 	public final fun setProxy (Ljava/net/Proxy;)V
+	public final fun setProxyPassword (Ljava/lang/String;)V
+	public final fun setProxyUsername (Ljava/lang/String;)V
 	public final fun setTimeout (I)V
 	public final fun setToken (Ljava/lang/String;)V
 	public final fun setWebhookConfig (Lcom/github/kotlintelegrambot/webhook/WebhookConfig;)V

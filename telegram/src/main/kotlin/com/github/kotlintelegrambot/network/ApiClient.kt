@@ -45,6 +45,8 @@ import com.github.kotlintelegrambot.network.retrofit.converters.ChatIdConverterF
 import com.github.kotlintelegrambot.network.retrofit.converters.DiceEmojiConverterFactory
 import com.github.kotlintelegrambot.network.retrofit.converters.EnumRetrofitConverterFactory
 import com.github.kotlintelegrambot.network.retrofit.converters.InputMediaConverterFactory
+import com.github.kotlintelegrambot.network.proxy.ProxyCredentials
+import com.github.kotlintelegrambot.network.proxy.httpProxyAuthenticator
 import com.github.kotlintelegrambot.network.serialization.GsonFactory
 import com.github.kotlintelegrambot.types.TelegramBotResult
 import com.google.gson.Gson
@@ -81,6 +83,7 @@ internal class ApiClient(
     private val apiRequestSender: ApiRequestSender = ApiRequestSender(),
     private val apiResponseMapper: ApiResponseMapper = ApiResponseMapper(),
     private val httpClientInterceptors: List<Interceptor> = emptyList(),
+    private val proxyCredentials: ProxyCredentials? = null,
 ) {
     private val service: ApiService
 
@@ -98,6 +101,11 @@ internal class ApiClient(
                 .also { builder -> httpClientInterceptors.forEach { builder.addInterceptor(it) } }
                 .retryOnConnectionFailure(true)
                 .proxy(proxy)
+                .apply {
+                    if (proxyCredentials != null && proxy.type() == Proxy.Type.HTTP) {
+                        proxyAuthenticator(httpProxyAuthenticator(proxyCredentials))
+                    }
+                }
                 .build()
 
         val retrofit =
